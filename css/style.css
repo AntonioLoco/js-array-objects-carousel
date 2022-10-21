@@ -51,6 +51,7 @@ img{
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
     overflow: hidden;
 }
 
@@ -126,3 +127,17 @@ img{
     object-position: center;
 }
 
+/* Controller Autoplay */
+.controller-autoplay{
+    width: 100%;
+    text-align: center;
+}
+
+.controller-autoplay button{
+    padding: .5em 1em;
+    background-color: rgb(49, 123, 207);
+    color: #fff;
+    border-style: none;
+    border-radius: 5px;
+    margin: 0 .5em;
+}

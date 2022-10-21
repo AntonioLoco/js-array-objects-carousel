@@ -4,9 +4,6 @@
 - descrizione
 Creare un carosello come nella foto allegata. Attenzione! Le immagini nello screenshot sono differenti da quelli  che vi invio, ma il layout non cambia.
 
-
-BONUS 2:
-
 BONUS 3:
 Aggiungere bottoni di start/stop e di inversione del meccanismo di autoplay.
 */
@@ -40,6 +37,10 @@ const cardListElement = document.querySelector(".card-list");
 const thumbnailsListElement = document.querySelector(".thumnails-list");
 const btnPrev = document.getElementById("btn-prev");
 const btnNext = document.getElementById("btn-next");
+const btnDirection = document.getElementById("direction-autoplay");
+const directionTagElement = document.getElementById("direction-tag");
+const btnStartStop = document.getElementById("start-stop-autoplay");
+const statusAutoplay = document.getElementById("status-autoplay");
 
 //Aggiungiamo gli elementi al carosello dinamicamente
 printCardItem(images, cardListElement);
@@ -63,7 +64,52 @@ btnPrev.addEventListener("click", prevCard);
 thumnailsClick();
 
 // Funzione di autoPlay
-autoPlay();
+let direction = "right";
+let statoAutoplay = "start";
+directionTagElement.textContent = direction;
+
+if( statoAutoplay === "start"){
+    statusAutoplay.textContent = "Interrompi";
+} else {
+    statusAutoplay.textContent = "Avvia";
+}
+
+let autoplay = setInterval(nextCard, 3000);
+
+// Controllo della direzione dell autoSlide
+btnDirection.addEventListener("click", function(){
+    if(direction === "right"){
+        direction = "left";
+        clearInterval(autoplay);
+        autoplay = setInterval(prevCard, 3000);
+    } else{
+        direction = "right";
+        clearInterval(autoplay);
+        autoplay = setInterval(nextCard, 3000);
+    }
+
+    directionTagElement.textContent = direction;
+});
+
+// Controllo del button Start e Stop
+btnStartStop.addEventListener("click", function(){
+    if(statoAutoplay === "start"){
+        statoAutoplay = "stop";
+        statusAutoplay.textContent = "Avvia";
+        clearInterval(autoplay);
+    } else{
+        statoAutoplay = "start";
+        statusAutoplay.textContent = "Interrompi";
+        if(direction === "right"){
+            autoplay = setInterval(nextCard, 3000);
+        } else {
+            autoplay = setInterval(prevCard, 3000);
+        }
+    }
+
+});
+
+
 
 
 
@@ -147,18 +193,6 @@ function thumnailsClick(){
             cardList[currentCard].classList.add("active");
         });
     }
-}
-
-
-/**
- * Description: Funzione che ci implementa l'autoplay: dopo un certo periodo di tempo (timer) scorre le immagini andando avanti
- * @param {any} timer - tempo di scorrimento
- * @returns {void}
- */
-function autoPlay(timer){
-    const autoplay = setInterval(() => {
-        nextCard();
-    }, timer);
 }
 
 
