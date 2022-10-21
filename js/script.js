@@ -6,7 +6,7 @@ Creare un carosello come nella foto allegata. Attenzione! Le immagini nello scre
 
 
 BONUS 2:
-Aggiungere funzionalità di autoplay: dopo un certo periodo di tempo (3 secondi) l’immagine attiva dovrà cambiare alla successiva.
+
 BONUS 3:
 Aggiungere bottoni di start/stop e di inversione del meccanismo di autoplay.
 */
@@ -62,6 +62,8 @@ btnPrev.addEventListener("click", prevCard);
 //Gestione del click sulle thumbnails
 thumnailsClick();
 
+// Funzione di autoPlay
+autoPlay();
 
 
 
@@ -145,6 +147,18 @@ function thumnailsClick(){
             cardList[currentCard].classList.add("active");
         });
     }
+}
+
+
+/**
+ * Description: Funzione che ci implementa l'autoplay: dopo un certo periodo di tempo (timer) scorre le immagini andando avanti
+ * @param {any} timer - tempo di scorrimento
+ * @returns {void}
+ */
+function autoPlay(timer){
+    const autoplay = setInterval(() => {
+        nextCard();
+    }, timer);
 }
 
 
