@@ -5,13 +5,6 @@
 Creare un carosello come nella foto allegata. Attenzione! Le immagini nello screenshot sono differenti da quelli  che vi invio, ma il layout non cambia.
 
 
-Milestone 1:
-Ora rimuoviamo i contenuti statici e usiamo l’array di oggetti letterali per popolare dinamicamente il carosello.
-Al click dell'utente sulle frecce verso sinistra o destra, l'immagine attiva diventerà visibile e dovremo aggiungervi titolo e testo.
-Milestone 2:
-Aggiungere il **ciclo infinito** del carosello. Ovvero se la miniatura attiva è la prima e l'utente clicca la freccia verso destra, la miniatura che deve attivarsi sarà l'ultima e viceversa per l'ultima miniatura se l'utente clicca la freccia verso sinistra.
-BONUS 1:
-Aggiungere le thumbnails (sottoforma di miniatura) ed al click attivare l’immagine corrispondente.
 BONUS 2:
 Aggiungere funzionalità di autoplay: dopo un certo periodo di tempo (3 secondi) l’immagine attiva dovrà cambiare alla successiva.
 BONUS 3:
@@ -44,16 +37,21 @@ const images = [
 ];
 
 const cardListElement = document.querySelector(".card-list");
+const thumbnailsListElement = document.querySelector(".thumnails-list");
 const btnPrev = document.getElementById("btn-prev");
 const btnNext = document.getElementById("btn-next");
 
 //Aggiungiamo gli elementi al carosello dinamicamente
 printCardItem(images, cardListElement);
+printThumbnailsItem(images, thumbnailsListElement);
 
 // Imposto la situazione di partenza
 const cardList = document.getElementsByClassName("card-item");
+const thumbnailsList = document.getElementsByClassName("thumbnails-item");
+
 let currentCard = 0;
 cardList[currentCard].classList.add("active");
+thumbnailsList[currentCard].classList.add("active");
 
 
 // Gestione del click sul button next
@@ -61,10 +59,8 @@ btnNext.addEventListener("click", nextCard);
 btnPrev.addEventListener("click", prevCard);
 
 
-
-
-
-
+//Gestione del click sulle thumbnails
+thumnailsClick();
 
 
 
@@ -77,15 +73,28 @@ btnPrev.addEventListener("click", prevCard);
  * @returns {void}
  */
 function nextCard(){
+    //Incremento l'indice di posizione
     currentCard++;
 
     if(currentCard < cardList.length){
+        // Rimuovo la classe dall'elemento precedente
         cardList[currentCard - 1].classList.remove("active");
+        thumbnailsList[currentCard - 1].classList.remove("active");
+
+        // Aggiungo la classe all'elemento corrente
         cardList[currentCard].classList.add("active");
+        thumbnailsList[currentCard].classList.add("active");
     } else {
+        //Imposto l'indice allo stato iniziale
         currentCard = 0;
+
+        //rimuovo la classe active dall'ultimo elemento della lista
         cardList[cardList.length - 1].classList.remove("active");
+        thumbnailsList[cardList.length - 1].classList.remove("active");
+
+        //Aggiungo la classe active all'elemento corrente
         cardList[currentCard].classList.add("active");
+        thumbnailsList[currentCard].classList.add("active");
     }
 }
 
@@ -94,19 +103,49 @@ function nextCard(){
  * @returns {void}
  */
 function prevCard(){
+    //Decremento l'indice di posizione 
     currentCard--;
 
     if(currentCard >= 0){
+        //Rimuovo la classe active dall'elemento successivo
         cardList[currentCard + 1].classList.remove("active");
+        thumbnailsList[currentCard + 1].classList.remove("active");
+
+        // Aggiungo la classe active all'elemento corrente
         cardList[currentCard].classList.add("active");
+        thumbnailsList[currentCard].classList.add("active");
 
     } else {
+        //Imposto l'indice all'ultimo elemento della lista
         currentCard = cardList.length - 1;
+
+        //Rimuovo la classe active dal primo elemento
         cardList[0].classList.remove("active");
+        thumbnailsList[0].classList.remove("active");
+
+        //Aggiungo la classe active all'elemento corrente
         cardList[currentCard].classList.add("active");
+        thumbnailsList[currentCard].classList.add("active");
     }
 }
 
+/**
+ * Description: Funzione che gestisce il click sulle singole thumbnails
+ * @returns {void}
+ */
+function thumnailsClick(){
+    for(let i = 0; i < thumbnailsList.length; i++){
+        thisThumb = thumbnailsList[i];
+        thisThumb.addEventListener("click", function(){
+            thumbnailsList[currentCard].classList.remove("active");
+            cardList[currentCard].classList.remove("active");
+    
+            currentCard = i;
+            thumbnailsList[currentCard].classList.add("active");
+            cardList[currentCard].classList.add("active");
+        });
+    }
+}
 
 
 //UI FUNCTION
@@ -127,5 +166,21 @@ function printCardItem(imagesArray, cardList){
             </div>
         `;
         cardList.innerHTML += cardItem;
+    });
+}
+
+/**
+ * Description: Funzione che ci aggiunge gli oggetti thumbnails alla pagina
+ * @param {any} imagesArray - Array di oggetti che andranno inseriti sulla pagina
+ * @param {any} cardList - Oggetto HTML dove andranno inseriti le thumbnails
+ */
+function printThumbnailsItem(imagesArray, thumbnailsList){
+    imagesArray.forEach((item) => {
+        const cardItem = `
+            <div class="thumbnails-item">
+                <img src="${item.image}" alt="${item.title}">
+            </div>
+        `;
+        thumbnailsList.innerHTML += cardItem;
     });
 }
