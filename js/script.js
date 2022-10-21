@@ -3,8 +3,8 @@
 - titolo
 - descrizione
 Creare un carosello come nella foto allegata. Attenzione! Le immagini nello screenshot sono differenti da quelli  che vi invio, ma il layout non cambia.
-Milestone 0:
-Come nel primo carosello realizzato, focalizziamoci prima sulla creazione del markup statico: costruiamo il container e inseriamo l'immagine grande in modo da poter stilare lo slider.
+
+
 Milestone 1:
 Ora rimuoviamo i contenuti statici e usiamo l’array di oggetti letterali per popolare dinamicamente il carosello.
 Al click dell'utente sulle frecce verso sinistra o destra, l'immagine attiva diventerà visibile e dovremo aggiungervi titolo e testo.
@@ -42,3 +42,90 @@ const images = [
         text: 'Marvel\'s Avengers is an epic, third-person, action-adventure game that combines an original, cinematic story with single-player and co-operative gameplay.',
     }
 ];
+
+const cardListElement = document.querySelector(".card-list");
+const btnPrev = document.getElementById("btn-prev");
+const btnNext = document.getElementById("btn-next");
+
+//Aggiungiamo gli elementi al carosello dinamicamente
+printCardItem(images, cardListElement);
+
+// Imposto la situazione di partenza
+const cardList = document.getElementsByClassName("card-item");
+let currentCard = 0;
+cardList[currentCard].classList.add("active");
+
+
+// Gestione del click sul button next
+btnNext.addEventListener("click", nextCard);
+btnPrev.addEventListener("click", prevCard);
+
+
+
+
+
+
+
+
+
+
+
+// FUNCTION
+
+/**
+ * Description: Funzione che ci permette di impostare la classe active alla card successiva
+ * @returns {void}
+ */
+function nextCard(){
+    currentCard++;
+
+    if(currentCard < cardList.length){
+        cardList[currentCard - 1].classList.remove("active");
+        cardList[currentCard].classList.add("active");
+    } else {
+        currentCard = 0;
+        cardList[cardList.length - 1].classList.remove("active");
+        cardList[currentCard].classList.add("active");
+    }
+}
+
+/**
+ * Description: Funzione che ci permette di impostare la classe active alla card precedente
+ * @returns {void}
+ */
+function prevCard(){
+    currentCard--;
+
+    if(currentCard >= 0){
+        cardList[currentCard + 1].classList.remove("active");
+        cardList[currentCard].classList.add("active");
+
+    } else {
+        currentCard = cardList.length - 1;
+        cardList[0].classList.remove("active");
+        cardList[currentCard].classList.add("active");
+    }
+}
+
+
+
+//UI FUNCTION
+/**
+ * Description: Funzione che ci aggiunge gli oggetti card alla pagina
+ * @param {any} imagesArray - Array di oggetti che andranno inseriti sulla pagina
+ * @param {any} cardList - Oggetto HTML dove andranno inseriti le card
+ */
+function printCardItem(imagesArray, cardList){
+    imagesArray.forEach((item) => {
+        const cardItem = `
+            <div class="card-item">
+                <img src="${item.image}" alt="${item.title}">
+                <div class="text-card">
+                    <h2>${item.title}</h2>
+                    <p>${item.text}</p>
+                </div>
+            </div>
+        `;
+        cardList.innerHTML += cardItem;
+    });
+}
