@@ -4,8 +4,6 @@
 - descrizione
 Creare un carosello come nella foto allegata. Attenzione! Le immagini nello screenshot sono differenti da quelli  che vi invio, ma il layout non cambia.
 
-BONUS 3:
-Aggiungere bottoni di start/stop e di inversione del meccanismo di autoplay.
 */
 
 //DATO
@@ -81,11 +79,15 @@ btnDirection.addEventListener("click", function(){
     if(direction === "right"){
         direction = "left";
         clearInterval(autoplay);
-        autoplay = setInterval(prevCard, 3000);
+        if(statoAutoplay === "start"){
+            autoplay = setInterval(prevCard, 3000);
+        }
     } else{
         direction = "right";
         clearInterval(autoplay);
-        autoplay = setInterval(nextCard, 3000);
+        if(statoAutoplay === "start"){
+            autoplay = setInterval(nextCard, 3000);
+        }
     }
 
     directionTagElement.textContent = direction;
